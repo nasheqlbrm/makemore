@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "makemore"
+  site-url: "https://nasheqlbrm.github.io/makemore"
+  description: "An autoregressive character-level language model for making more things"
+  repo-branch: master
+  repo-url: "https://github.com/nasheqlbrm/makemore"
