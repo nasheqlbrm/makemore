@@ -1,0 +1,6 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_tutorial.ipynb
+      - 01_build_makemore_yay.ipynb
