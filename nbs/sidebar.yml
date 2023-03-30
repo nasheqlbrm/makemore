@@ -4,3 +4,4 @@ website:
       - index.ipynb
       - 01_build_makemore_yay.ipynb
       - 02_build_makemore_mlp_yay.ipynb
+      - 03_makemore_bn.ipynb
