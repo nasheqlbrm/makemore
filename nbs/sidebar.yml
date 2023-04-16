@@ -6,3 +6,4 @@ website:
       - 02_build_makemore_mlp_yay.ipynb
       - 03_makemore_bn.ipynb
       - 04_backprop.ipynb
+      - 05_cnn1.ipynb
