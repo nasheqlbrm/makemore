@@ -8,3 +8,4 @@ website:
       - 04_backprop.ipynb
       - 05_cnn1.ipynb
       - e01.ipynb
+      - e02.ipynb
