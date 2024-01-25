@@ -7,8 +7,8 @@ website:
       - 03_makemore_bn.ipynb
       - 04_backprop.ipynb
       - 05_cnn1.ipynb
-      - e01.ipynb
-      - e02.ipynb
-      - e03.ipynb
-      - e04.ipynb
-      - e05.ipynb
+      - L01_e01.ipynb
+      - L01_e02.ipynb
+      - L01_e03.ipynb
+      - L01_e04.ipynb
+      - L01_e05.ipynb
