@@ -1,0 +1,2514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>makemore - Build makemore MLP</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="makemore - Build makemore MLP">
+<meta property="og:site_name" content="makemore">
+<meta name="twitter:title" content="makemore - Build makemore MLP">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">makemore</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./build_makemore_mlp_yay.html">Build makemore MLP</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makemore</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./build_makemore_yay.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Build makemore yay</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./build_makemore_mlp_yay.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Build makemore MLP</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./makemore_bn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Makemore Part 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./backprop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Makemore Part 4</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cnn1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Makemore Part 5</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_e01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">L01_E01</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_e02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">L01_E02</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_e03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">L01_E03</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_e04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">L01_E04</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./l01_e05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">L01_E05</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#build-the-dataset" id="toc-build-the-dataset" class="nav-link active" data-scroll-target="#build-the-dataset">Build the dataset</a></li>
+  <li><a href="#fit-the-entire-dataset" id="toc-fit-the-entire-dataset" class="nav-link" data-scroll-target="#fit-the-entire-dataset">Fit the entire dataset</a>
+  <ul class="collapse">
+  <li><a href="#how-to-determine-a-reasonable-learning-rate" id="toc-how-to-determine-a-reasonable-learning-rate" class="nav-link" data-scroll-target="#how-to-determine-a-reasonable-learning-rate">How to determine a reasonable learning rate</a></li>
+  <li><a href="#scale-up-the-neural-net" id="toc-scale-up-the-neural-net" class="nav-link" data-scroll-target="#scale-up-the-neural-net">Scale up the neural net</a></li>
+  <li><a href="#visualize-embedding" id="toc-visualize-embedding" class="nav-link" data-scroll-target="#visualize-embedding">Visualize embedding</a></li>
+  <li><a href="#lets-make-the-embedding-vector-bigger" id="toc-lets-make-the-embedding-vector-bigger" class="nav-link" data-scroll-target="#lets-make-the-embedding-vector-bigger">Let’s make the embedding vector bigger</a></li>
+  <li><a href="#sample-from-the-model" id="toc-sample-from-the-model" class="nav-link" data-scroll-target="#sample-from-the-model">Sample from the model</a></li>
+  </ul></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/nasheqlbrm/makemore/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Build makemore MLP</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div id="e908661d" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="3b3ec550" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> <span class="bu">open</span>(<span class="st">'../names.txt'</span>,<span class="st">'r'</span>).read().splitlines()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>words[:<span class="dv">8</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['emma', 'olivia', 'ava', 'isabella', 'sophia', 'charlotte', 'mia', 'amelia']</code></pre>
+</div>
+</div>
+<div id="982ee771" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(words)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>32033</code></pre>
+</div>
+</div>
+<section id="build-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-dataset">Build the dataset</h2>
+<div id="66ad6019" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>chars <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">set</span>(<span class="bu">list</span>(<span class="st">''</span>.join(words))))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>stoi <span class="op">=</span> {char:idx<span class="op">+</span><span class="dv">1</span> <span class="cf">for</span> idx,char <span class="kw">in</span> <span class="bu">enumerate</span>(chars)}</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>stoi[<span class="st">'.'</span>] <span class="op">=</span> <span class="dv">0</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>itos <span class="op">=</span> {idx:char <span class="cf">for</span> char, idx <span class="kw">in</span> stoi.items()}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(itos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h', 9: 'i', 10: 'j', 11: 'k', 12: 'l', 13: 'm', 14: 'n', 15: 'o', 16: 'p', 17: 'q', 18: 'r', 19: 's', 20: 't', 21: 'u', 22: 'v', 23: 'w', 24: 'x', 25: 'y', 26: 'z', 0: '.'}</code></pre>
+</div>
+</div>
+<div id="f1273e91" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>block_size <span class="op">=</span> <span class="dv">3</span> <span class="co">#characters to take as context before predicting the next</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>X,Y<span class="op">=</span>[],[]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> words[:<span class="dv">5</span>]:</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(w)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    context <span class="op">=</span> [<span class="dv">0</span>]<span class="op">*</span>block_size</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ch <span class="kw">in</span> w <span class="op">+</span> <span class="st">'.'</span>:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        ix<span class="op">=</span>stoi[ch]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        X.append(context)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        Y.append(ix)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">''</span>.join(itos[i] <span class="cf">for</span> i <span class="kw">in</span> context))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        context <span class="op">=</span> context[<span class="dv">1</span>:] <span class="op">+</span> [ix]</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> torch.tensor(X)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> torch.tensor(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>emma
+...
+..e
+.em
+emm
+mma
+olivia
+...
+..o
+.ol
+oli
+liv
+ivi
+via
+ava
+...
+..a
+.av
+ava
+isabella
+...
+..i
+.is
+isa
+sab
+abe
+bel
+ell
+lla
+sophia
+...
+..s
+.so
+sop
+oph
+phi
+hia</code></pre>
+</div>
+</div>
+<div id="479332d6" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X.shape, X.dtype, Y.shape, Y.dtype</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(torch.Size([32, 3]), torch.int64, torch.Size([32]), torch.int64)</code></pre>
+</div>
+</div>
+<div id="97a662b7" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We will embed the 27 characters into 2-d space</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> torch.randn((<span class="dv">27</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="ae1292b7" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>C[<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([0.7707, 0.4602])</code></pre>
+</div>
+</div>
+<div id="0069132f" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>emb <span class="op">=</span> C[X]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>emb.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>torch.Size([32, 3, 2])</code></pre>
+</div>
+</div>
+<div id="21ca8ac6" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>W1 <span class="op">=</span> torch.randn((<span class="dv">6</span>,<span class="dv">100</span>)) <span class="co"># 100 neurons each taking 6 inputs</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> torch.randn((<span class="dv">100</span>)) <span class="co"># the bias for each of the 100 neurons</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="705bca9b" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> torch.randn((<span class="dv">100</span>,<span class="dv">27</span>)) <span class="co"># 27 neurons each taking 100 inputs</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>b2 <span class="op">=</span> torch.randn(<span class="dv">27</span>) <span class="co"># the biases for these neurons</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="dfa401cf" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="817a7713" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#hide</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>logits</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([[-1.5712e+00,  6.4775e+00,  2.4227e+00, -6.1163e+00, -9.6750e-01,
+         -3.7930e+00,  3.0395e+00, -4.9640e-02, -4.6716e+00,  7.2450e+00,
+          4.3544e+00,  8.6875e+00,  1.1845e+01, -7.6275e+00,  9.6153e+00,
+          9.5495e-01,  6.8542e+00,  5.7101e+00, -5.0930e+00, -5.1109e+00,
+         -6.6592e+00,  1.5107e+00, -2.7422e+00, -1.0639e+01,  1.1445e+01,
+          6.0562e+00, -7.9084e+00],
+        [-1.1414e+01, -5.2216e+00,  1.4604e+01, -2.9679e+00, -3.2249e+00,
+          5.2879e+00,  1.0380e+00,  3.0865e+00, -2.1076e+00, -1.1681e+00,
+          3.7193e+00,  8.6231e+00,  1.4643e+01, -7.5952e+00,  4.4017e+00,
+          2.7152e+00,  4.0825e+00,  1.9799e-01, -5.1976e+00, -1.1109e+01,
+         -2.2308e+00,  1.4080e+01,  4.4385e-01, -1.1411e+01,  1.4374e+01,
+          4.7474e+00,  1.6334e+00],
+        [ 2.7240e+00,  2.2875e+00,  2.0797e+00, -1.4459e+00,  1.9813e+00,
+         -1.2591e+00,  1.7075e+00,  8.4354e+00,  6.0224e-01,  6.6338e+00,
+         -7.4939e-01,  6.4123e+00,  8.8422e-01, -8.3480e+00,  2.6986e+00,
+         -4.8461e+00, -2.3606e+00,  3.8973e+00, -5.1208e+00, -6.9224e+00,
+         -5.1280e+00,  2.9414e+00, -1.2090e+00, -5.2098e+00,  1.2319e+01,
+          7.9001e+00, -1.0687e+01],
+        [ 2.6909e+00,  3.4520e-01, -4.3895e+00, -1.1090e+01, -5.3512e-01,
+         -5.1047e+00, -1.3574e+01,  3.6265e+00,  3.1571e+00,  8.1377e+00,
+          1.3232e+00,  1.0132e+01,  9.7991e+00, -8.5233e+00,  6.9173e+00,
+         -3.8589e+00,  8.9302e+00, -9.4706e-01, -4.7240e-01, -9.4254e+00,
+         -7.4909e+00,  1.2862e+01, -1.1108e+00, -5.1111e+00,  9.8631e+00,
+         -3.1252e+00, -1.3291e+01],
+        [-8.1137e+00, -1.2994e+01,  1.6356e+01, -4.4418e-01, -3.4179e+00,
+          5.8358e+00, -2.9822e+00,  1.0996e+00,  4.3502e+00, -1.8565e+00,
+          3.0909e+00,  6.3928e+00,  9.9394e+00, -7.4839e+00,  1.8743e+00,
+          5.5036e+00, -2.8334e+00, -7.7502e+00, -1.0118e+01, -1.3051e+01,
+         -2.6067e+00,  1.7873e+01, -5.2643e+00, -8.9650e+00,  1.5337e+01,
+          3.6541e-01, -1.2849e+00],
+        [-1.5712e+00,  6.4775e+00,  2.4227e+00, -6.1163e+00, -9.6750e-01,
+         -3.7930e+00,  3.0395e+00, -4.9640e-02, -4.6716e+00,  7.2450e+00,
+          4.3544e+00,  8.6875e+00,  1.1845e+01, -7.6275e+00,  9.6153e+00,
+          9.5495e-01,  6.8542e+00,  5.7101e+00, -5.0930e+00, -5.1109e+00,
+         -6.6592e+00,  1.5107e+00, -2.7422e+00, -1.0639e+01,  1.1445e+01,
+          6.0562e+00, -7.9084e+00],
+        [ 2.7781e+00,  1.5772e+01, -9.5033e+00, -4.3731e+00,  1.4002e+00,
+         -1.2261e+01,  2.8755e+00,  4.7682e-01, -5.2609e+00,  1.1189e+01,
+          2.7156e+00,  2.8323e+00,  5.3391e+00, -2.2407e+00,  1.4356e+01,
+         -4.1353e+00,  9.5672e+00,  1.1996e+01, -5.7497e-01,  3.5758e+00,
+         -1.0854e+01, -1.0274e+01, -2.1601e+00, -4.4716e+00,  2.9408e-03,
+          8.2284e+00, -1.1229e+01],
+        [-8.3011e+00,  7.8434e+00,  5.4331e-01, -1.1475e+01, -4.0334e+00,
+         -2.9738e-01,  1.0030e+01, -5.3422e+00,  1.8868e+00,  2.1619e-01,
+          5.4946e+00,  9.7572e+00,  1.7324e+01,  2.3993e+00,  7.8914e+00,
+          4.8748e+00,  1.1404e+01,  4.3308e+00,  2.1798e-02, -6.5874e+00,
+          1.8951e+00,  8.1858e-01, -4.0129e+00, -1.3114e+01,  5.2870e+00,
+          1.3965e+00,  8.3496e+00],
+        [-3.2789e+00,  7.0680e+00,  1.7777e+01,  1.4818e+01, -1.0853e+01,
+          5.9951e+00,  8.7378e+00, -3.9229e+00, -1.1113e+01,  5.8286e+00,
+          4.1336e+00,  2.4581e+00,  1.2518e+00, -2.5907e+00,  3.9162e+00,
+          1.1268e+01, -1.7150e+00,  1.2360e+00, -1.9621e+01, -3.3848e+00,
+         -2.3710e-01, -7.0385e-01, -8.7807e+00, -1.1484e+01,  7.7609e+00,
+          5.1029e+00,  5.2459e-01],
+        [ 2.3538e+00,  1.6822e+01, -6.6138e+00, -3.9050e+00,  1.6447e+00,
+         -1.5868e+01,  3.6770e-02, -9.8547e+00, -3.9623e+00,  8.1969e+00,
+          2.4445e+00,  1.1520e+01,  1.2564e+01,  1.8001e+00,  1.4745e+01,
+         -2.0110e+00,  1.0222e+01,  7.6679e+00, -1.0479e+01,  5.4202e+00,
+         -3.9218e+00, -1.6291e+00, -1.0842e+01, -4.2773e+00, -9.5407e-01,
+          9.2356e+00, -4.2587e+00],
+        [-5.5999e+00,  4.6339e-02,  1.3968e+01,  4.2199e-01, -1.3464e+01,
+          3.0614e+00,  4.3031e+00, -3.7535e+00, -4.4443e+00,  5.5488e+00,
+          3.4952e+00, -5.4577e+00,  8.8727e+00, -4.1454e+00,  1.1061e+01,
+          1.0257e+01,  5.6655e+00, -3.4881e+00, -1.2619e+01, -1.5718e+00,
+         -6.2952e+00,  7.7270e+00, -7.6547e-01, -1.2742e+01,  8.5068e+00,
+         -2.6579e+00,  1.0781e+00],
+        [-1.3057e+01, -9.1046e-01,  9.8233e+00,  4.3871e+00, -4.4727e+00,
+          6.5640e-01,  1.2535e+01,  2.3962e+00, -1.2385e+01,  3.0250e+00,
+          1.0686e+01,  9.9788e+00,  1.0376e+01, -1.9435e+00,  8.6010e+00,
+          7.2442e+00,  5.4738e+00,  4.8524e+00, -1.3857e+01, -2.4433e+00,
+          7.0141e+00,  1.0372e+01,  5.8494e-01, -9.3842e+00,  1.2519e+01,
+         -9.1563e-01,  9.4245e+00],
+        [-1.5712e+00,  6.4775e+00,  2.4227e+00, -6.1163e+00, -9.6750e-01,
+         -3.7930e+00,  3.0395e+00, -4.9640e-02, -4.6716e+00,  7.2450e+00,
+          4.3544e+00,  8.6875e+00,  1.1845e+01, -7.6275e+00,  9.6153e+00,
+          9.5495e-01,  6.8542e+00,  5.7101e+00, -5.0930e+00, -5.1109e+00,
+         -6.6592e+00,  1.5107e+00, -2.7422e+00, -1.0639e+01,  1.1445e+01,
+          6.0562e+00, -7.9084e+00],
+        [-1.0373e+01, -9.8450e+00,  1.9715e+01,  1.2702e+00, -4.4900e+00,
+          6.7019e+00,  1.7119e+00, -4.8967e-01,  1.9153e+00, -2.7928e+00,
+          2.4433e+00,  4.7777e+00,  1.1808e+01, -9.5322e+00,  3.8152e+00,
+          7.5374e+00, -1.1621e+00, -5.3773e+00, -1.3271e+01, -9.9735e+00,
+         -2.5263e+00,  1.4034e+01, -4.1221e+00, -1.1579e+01,  1.3921e+01,
+          2.0673e+00,  1.0811e+00],
+        [ 9.8702e+00,  1.5530e+01, -7.1097e+00,  3.2101e+00,  5.0395e+00,
+         -1.1800e+01,  3.1334e+00,  7.9172e-03, -6.7110e+00,  9.4794e+00,
+         -3.6846e-01,  1.3742e+00, -3.0685e+00, -4.8999e+00,  9.8286e+00,
+         -7.6280e+00,  3.1451e-01,  6.6989e+00, -4.5809e+00,  2.9515e+00,
+         -3.3153e+00, -8.9012e+00, -5.9478e+00, -6.2784e+00,  5.0299e+00,
+          1.1671e+01, -1.4521e+01],
+        [-6.8192e+00, -5.1056e+00,  6.3554e+00, -9.9915e+00, -4.3567e+00,
+          1.8480e+00, -5.9830e+00, -6.7096e+00,  9.0971e+00, -5.9679e+00,
+         -1.4075e-01,  4.6723e+00,  1.7833e+01, -1.6069e+00,  1.3336e+01,
+          5.7863e+00,  1.0103e+01, -5.7125e+00, -1.6441e+00, -1.0888e+01,
+         -5.8458e+00,  2.0883e+01, -7.8556e-01, -5.1193e-01,  7.8525e+00,
+         -1.0348e+01, -1.4689e+00],
+        [-1.5712e+00,  6.4775e+00,  2.4227e+00, -6.1163e+00, -9.6750e-01,
+         -3.7930e+00,  3.0395e+00, -4.9640e-02, -4.6716e+00,  7.2450e+00,
+          4.3544e+00,  8.6875e+00,  1.1845e+01, -7.6275e+00,  9.6153e+00,
+          9.5495e-01,  6.8542e+00,  5.7101e+00, -5.0930e+00, -5.1109e+00,
+         -6.6592e+00,  1.5107e+00, -2.7422e+00, -1.0639e+01,  1.1445e+01,
+          6.0562e+00, -7.9084e+00],
+        [-2.7944e+00,  2.4597e+00,  1.8484e+01,  5.4412e+00, -1.0345e+01,
+          4.1629e+00,  1.5971e+00, -1.4642e+00, -7.0187e+00,  6.2320e+00,
+          8.1636e+00,  2.9863e+00,  7.9548e+00, -9.4059e+00,  9.7565e+00,
+          9.3063e+00,  7.1022e-01, -4.1357e+00, -1.9266e+01, -6.9632e+00,
+         -4.0927e+00,  6.2704e+00, -8.9874e+00, -1.0132e+01,  1.1037e+01,
+         -1.6904e-01, -7.1610e+00],
+        [ 4.1152e+00,  1.6659e+01, -1.0580e+01, -2.8056e+00,  3.0078e+00,
+         -1.5674e+01,  1.6634e+00, -6.5095e+00, -8.7387e-01,  8.8331e+00,
+          6.1359e-02,  8.9786e+00,  1.0379e+01,  3.2012e+00,  1.5875e+01,
+         -5.2932e+00,  1.2630e+01,  9.8720e+00, -3.9225e+00,  6.5532e+00,
+         -2.6431e+00, -8.3695e+00, -9.0747e+00, -3.3724e+00, -3.3914e+00,
+          8.6024e+00, -3.9129e+00],
+        [-5.9882e+00, -7.9256e+00,  1.7311e+01, -2.7060e+00, -8.6274e+00,
+          7.7673e+00,  9.6774e-01, -3.2389e+00,  7.4955e+00, -3.9633e+00,
+         -3.5289e+00, -1.3769e+00,  1.4580e+01, -1.7096e+00,  5.8002e+00,
+          6.6892e+00,  7.2678e+00, -1.0491e+00, -5.1896e+00, -1.1165e+01,
+         -5.4481e+00,  1.2884e+01, -6.9343e-01, -1.4964e+01,  1.0520e+01,
+         -5.9684e-01,  1.9344e+00],
+        [-6.3779e+00,  7.6627e+00,  1.0554e+01,  1.2822e+01, -7.1233e+00,
+          5.5820e+00,  1.3102e+01, -2.2062e+00, -1.2082e+01,  7.2374e+00,
+          4.7888e+00,  4.5431e+00,  4.1381e+00, -5.4054e-01,  3.2053e+00,
+          1.0570e+00, -3.6033e+00,  8.3159e+00, -9.6000e+00, -5.3868e-01,
+         -5.0949e+00, -7.6297e-01, -5.9547e+00, -4.4397e+00,  1.4877e+01,
+          9.6608e+00,  2.2357e+00],
+        [ 2.5070e+00, -6.7642e+00, -3.4144e+00, -7.4065e+00, -5.6143e-01,
+         -3.6607e+00, -1.2330e+01,  6.8767e+00,  6.2150e+00,  7.6221e+00,
+         -5.2523e-01,  9.3214e+00,  9.4947e+00, -1.1244e+01,  5.8591e+00,
+         -2.2351e+00,  1.0364e+01, -2.7705e+00, -7.6708e+00, -7.3663e+00,
+         -1.8132e+00,  2.2463e+01,  1.9395e+00, -4.9492e+00,  6.8813e+00,
+         -4.7338e+00, -1.0243e+01],
+        [ 6.2369e+00, -4.2954e-01, -3.8479e+00, -6.9674e+00, -2.9983e+00,
+         -3.2102e+00, -5.7770e+00,  7.9880e+00,  7.7360e+00,  7.7267e+00,
+         -6.4441e+00,  3.4970e+00, -1.0163e+00, -1.2489e+01,  4.1478e+00,
+         -8.1538e+00,  1.9925e+00,  7.3668e+00, -5.0776e+00, -1.1681e+01,
+         -2.8693e+00,  4.9756e+00,  2.8869e+00, -7.1886e+00,  7.3547e+00,
+          6.1679e+00, -1.7327e+01],
+        [ 2.0446e+00,  2.1432e+00, -6.3501e+00, -1.1753e+01, -2.8364e-01,
+         -6.4276e+00, -1.2720e+01,  3.4048e+00,  2.4393e+00,  7.7354e+00,
+          1.4673e+00,  1.0444e+01,  1.0206e+01, -6.7567e+00,  7.4967e+00,
+         -5.4738e+00,  1.0771e+01,  7.9474e-01,  3.6025e+00, -9.1816e+00,
+         -8.1699e+00,  1.1093e+01,  1.7845e-01, -4.4326e+00,  9.5199e+00,
+         -3.9068e+00, -1.1582e+01],
+        [-8.7417e+00, -1.3035e+01,  1.8533e+01, -3.8315e-01, -4.2558e+00,
+          6.3288e+00,  1.4208e-01,  4.6246e-01,  3.9653e+00, -2.0584e+00,
+          2.6605e+00,  5.8512e+00,  9.7596e+00, -6.0193e+00,  7.6110e-01,
+          7.3024e+00, -4.3665e+00, -9.6208e+00, -9.2324e+00, -1.3271e+01,
+         -2.0581e+00,  1.5783e+01, -6.8011e+00, -9.4961e+00,  1.4576e+01,
+          1.8220e+00,  1.0937e+00],
+        [-1.5712e+00,  6.4775e+00,  2.4227e+00, -6.1163e+00, -9.6750e-01,
+         -3.7930e+00,  3.0395e+00, -4.9640e-02, -4.6716e+00,  7.2450e+00,
+          4.3544e+00,  8.6875e+00,  1.1845e+01, -7.6275e+00,  9.6153e+00,
+          9.5495e-01,  6.8542e+00,  5.7101e+00, -5.0930e+00, -5.1109e+00,
+         -6.6592e+00,  1.5107e+00, -2.7422e+00, -1.0639e+01,  1.1445e+01,
+          6.0562e+00, -7.9084e+00],
+        [ 2.3566e+00,  1.3321e+01, -1.0673e+01, -5.0367e+00,  2.1816e+00,
+         -1.3539e+01,  2.3319e+00,  1.6204e+00, -3.1216e+00,  1.1419e+01,
+          2.5245e+00,  4.2840e+00,  5.4702e+00, -2.3846e+00,  1.3813e+01,
+         -7.0136e+00,  9.7795e+00,  1.3572e+01,  1.5561e+00,  5.8909e-01,
+         -1.1135e+01, -1.1477e+01, -2.6126e+00, -4.1688e+00,  4.3893e-01,
+          7.8102e+00, -1.0677e+01],
+        [-5.0249e+00,  1.3887e+01, -1.0441e+01, -5.1595e+00,  4.5026e+00,
+         -1.1167e+01,  1.6500e+00, -4.5957e+00, -6.6368e+00,  6.7433e+00,
+          1.7717e+00,  3.6393e+00,  1.6428e+01,  2.3261e+00,  1.5833e+01,
+         -9.4666e-01,  1.6367e+01,  9.7090e+00,  2.9183e-01, -1.2338e+00,
+         -9.6955e+00, -9.5317e+00, -6.9675e+00, -5.4574e+00, -5.5669e+00,
+          5.4365e+00, -8.7264e-01],
+        [-1.2487e+01,  3.5623e+00,  1.5455e+01, -3.2870e+00, -3.4289e+00,
+          4.7080e-01,  2.0155e+01,  1.7393e+00, -3.4120e+00, -3.2637e+00,
+          3.6447e+00,  8.1095e+00,  1.5873e+01,  5.8974e+00,  3.0125e+00,
+          6.9951e+00,  4.8949e+00, -4.6465e-01, -1.8188e+00,  2.4302e-01,
+          5.3591e+00, -1.5366e+00, -3.2626e+00, -1.3932e+01,  3.1506e+00,
+          9.0332e+00,  1.6305e+01],
+        [-1.1939e+01, -1.9967e+00,  5.0661e+00,  4.3060e-01, -3.7668e+00,
+          1.0969e+01,  1.4923e+01,  1.3497e+01, -4.1815e+00, -1.2281e+00,
+          4.3371e+00,  1.0300e+01, -1.9726e+00,  4.8793e+00, -1.3060e+00,
+          4.8113e-01,  6.8805e+00,  9.2320e+00,  7.4918e+00, -5.2851e+00,
+         -3.6287e+00,  6.0335e+00,  1.5578e+01,  1.8301e+00,  1.3133e+01,
+          1.7611e+00,  1.1575e+01],
+        [-6.2679e+00, -4.6154e+00,  1.2012e+01,  9.7023e-01, -7.1178e+00,
+          1.4591e+01, -1.1914e+01,  5.3174e+00, -1.4772e+00,  4.9499e+00,
+          5.5290e+00, -3.0455e+00,  1.8301e-01, -4.7488e+00, -2.1558e-01,
+          1.6506e+00, -3.8448e-01, -9.4194e-01, -1.2552e+01, -1.2578e+01,
+         -4.8842e+00,  1.1857e+01,  3.1211e+00, -7.6543e+00,  1.2344e+01,
+         -8.5049e+00, -1.7395e+01],
+        [ 9.0097e+00, -3.0882e+00,  1.5451e+00, -5.3382e-01,  6.4750e+00,
+         -3.0595e+00,  2.2897e+00,  2.8895e+00,  2.9219e+00, -1.7165e+00,
+          4.9315e+00,  9.3390e+00,  1.6766e+01,  7.7421e+00,  6.7818e+00,
+         -2.8861e+00,  8.4345e+00, -1.4097e+01, -1.2662e+01, -5.5417e+00,
+          7.2831e-01,  1.8148e+01, -1.5886e+01, -3.4941e-01,  2.0409e+00,
+         -4.2794e+00, -6.5155e+00]])</code></pre>
+</div>
+</div>
+<div id="25272ca1" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> logits.exp()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d7309176" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> counts<span class="op">/</span>counts.<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>,keepdim<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c0fc6502" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> <span class="op">-</span>prob[torch.arange(<span class="dv">32</span>),Y].log().mean()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor(15.1157)</code></pre>
+</div>
+</div>
+<div id="dfacb562" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#hide</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>probs <span class="op">=</span> counts<span class="op">/</span>counts.<span class="bu">sum</span>()</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>probs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([0., 0., 0., nan])</code></pre>
+</div>
+</div>
+</section>
+<section id="fit-the-entire-dataset" class="level1">
+<h1>Fit the entire dataset</h1>
+<div id="a4de2922" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>block_size <span class="op">=</span> <span class="dv">3</span> <span class="co">#characters to take as context before predicting the next</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>X,Y<span class="op">=</span>[],[]</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> words:</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(w)</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    context <span class="op">=</span> [<span class="dv">0</span>]<span class="op">*</span>block_size</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ch <span class="kw">in</span> w <span class="op">+</span> <span class="st">'.'</span>:</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>        ix<span class="op">=</span>stoi[ch]</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>        X.append(context)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>        Y.append(ix)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         print(''.join(itos[i] for i in context))</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        context <span class="op">=</span> context[<span class="dv">1</span>:] <span class="op">+</span> [ix]</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> torch.tensor(X)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> torch.tensor(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="19c04b58" class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>X.shape, Y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(torch.Size([228146, 3]), torch.Size([228146]))</code></pre>
+</div>
+</div>
+<div id="f6829450" class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">2147483647</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> torch.randn((<span class="dv">27</span>,<span class="dv">2</span>), generator<span class="op">=</span>g)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>W1 <span class="op">=</span> torch.randn((<span class="dv">6</span>,<span class="dv">100</span>), generator<span class="op">=</span>g) <span class="co"># 100 neurons each taking 6 inputs</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> torch.randn((<span class="dv">100</span>), generator<span class="op">=</span>g) <span class="co"># the bias for each of the 100 neurons</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> torch.randn((<span class="dv">100</span>,<span class="dv">27</span>), generator<span class="op">=</span>g) <span class="co"># 27 neurons each taking 100 inputs</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>b2 <span class="op">=</span> torch.randn(<span class="dv">27</span>, generator<span class="op">=</span>g)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>parameters <span class="op">=</span> [C, W1, b1, W2, b2]</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    p.requires_grad <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="28f2bacb" class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>([p.nelement() <span class="cf">for</span> p <span class="kw">in</span> parameters])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>3481</code></pre>
+</div>
+</div>
+<section id="how-to-determine-a-reasonable-learning-rate" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-determine-a-reasonable-learning-rate">How to determine a reasonable learning rate</h2>
+<div id="0b52764e" class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,X.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[X[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Y[ix])</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(loss.item())</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> lrs[i]</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    lrei.append(lre[i])</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>    lossi.append(loss.item())</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="co"># print(loss.item())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>17.57276153564453
+18.38096809387207
+17.454505920410156
+21.21564292907715
+21.080862045288086
+19.18370246887207
+20.907495498657227
+17.437274932861328
+20.813051223754883
+17.57678985595703
+17.47332000732422
+18.42458724975586
+19.1214599609375
+19.37567901611328
+17.27273941040039
+16.733753204345703
+19.102767944335938
+16.82353973388672
+17.026931762695312
+17.733966827392578
+18.997385025024414
+18.89539337158203
+19.080354690551758
+21.113134384155273
+17.584501266479492
+18.75019645690918
+16.487337112426758
+17.951486587524414
+20.475780487060547
+17.734874725341797
+17.48705291748047
+16.38652801513672
+19.465002059936523
+20.70984649658203
+20.237873077392578
+19.666889190673828
+15.294360160827637
+16.641807556152344
+18.040142059326172
+18.168106079101562
+17.376449584960938
+14.23971939086914
+18.829219818115234
+18.401643753051758
+20.517444610595703
+16.9419002532959
+19.847139358520508
+20.43134880065918
+16.74691390991211
+18.466197967529297
+16.289216995239258
+19.889942169189453
+14.608063697814941
+19.21075439453125
+18.152891159057617
+17.74231719970703
+15.69858169555664
+19.93450927734375
+18.348236083984375
+18.120220184326172
+17.106590270996094
+16.182723999023438
+17.517831802368164
+17.5632266998291
+18.986392974853516
+17.822465896606445
+18.883325576782227
+15.437803268432617
+20.238292694091797
+16.066408157348633
+16.811321258544922
+17.691919326782227
+17.516746520996094
+17.40683937072754
+16.440587997436523
+14.209866523742676
+19.31875228881836
+16.58809471130371
+19.984298706054688
+16.213682174682617
+20.02408790588379
+17.488094329833984
+17.630659103393555
+18.153959274291992
+14.730700492858887
+17.322917938232422
+17.27118682861328
+17.030460357666016
+15.972298622131348
+15.829883575439453
+17.603626251220703
+14.789925575256348
+17.900957107543945
+16.318429946899414
+15.928333282470703
+16.756587982177734
+18.634824752807617
+17.96367073059082
+16.790319442749023
+17.987300872802734
+15.947249412536621
+15.854249000549316
+16.925750732421875
+14.131688117980957
+12.612247467041016
+16.975481033325195
+15.191967964172363
+16.70482063293457
+15.168463706970215
+17.52662467956543
+15.80912971496582
+15.530524253845215
+17.074796676635742
+15.531835556030273
+13.902630805969238
+14.349334716796875
+16.51013946533203
+16.840932846069336
+14.3120756149292
+16.94095230102539
+16.750511169433594
+16.597827911376953
+15.281488418579102
+15.984444618225098
+15.352628707885742
+15.726953506469727
+15.2005033493042
+17.539989471435547
+15.83510971069336
+13.191581726074219
+17.930709838867188
+14.170339584350586
+14.35737133026123
+12.1624174118042
+14.047713279724121
+16.080612182617188
+14.233263969421387
+13.770620346069336
+15.541193962097168
+16.58687973022461
+12.992834091186523
+14.201470375061035
+17.04505157470703
+16.81568717956543
+15.340707778930664
+17.045330047607422
+16.104442596435547
+13.92197036743164
+10.169665336608887
+15.461877822875977
+15.259256362915039
+15.423388481140137
+14.177938461303711
+12.693208694458008
+14.739204406738281
+13.535104751586914
+12.780099868774414
+14.464563369750977
+14.233803749084473
+14.992647171020508
+13.311644554138184
+15.53928279876709
+12.041337013244629
+13.274005889892578
+13.575145721435547
+14.164610862731934
+10.109086990356445
+11.826385498046875
+15.98048210144043
+16.12906265258789
+11.293645858764648
+13.293030738830566
+12.55268669128418
+15.317923545837402
+11.3443021774292
+13.8986177444458
+14.035137176513672
+14.727763175964355
+13.629745483398438
+13.641192436218262
+13.92994499206543
+14.99039077758789
+12.029653549194336
+12.228535652160645
+15.812777519226074
+11.198408126831055
+13.486011505126953
+10.95328140258789
+13.02483081817627
+14.279275894165039
+13.457911491394043
+11.409870147705078
+12.480180740356445
+12.73888111114502
+13.069488525390625
+14.35262680053711
+12.483602523803711
+11.16051197052002
+12.968238830566406
+13.372964859008789
+13.601683616638184
+11.866826057434082
+11.84825611114502
+10.876786231994629
+11.830960273742676
+12.459259033203125
+16.673175811767578
+13.886874198913574
+11.077066421508789
+12.524163246154785
+15.63658618927002
+13.755983352661133
+13.191400527954102
+12.109964370727539
+10.664148330688477
+14.248788833618164
+10.48939037322998
+11.84567642211914
+11.79554271697998
+12.221298217773438
+11.716007232666016
+12.102666854858398
+10.648828506469727
+11.631942749023438
+13.382360458374023
+9.633101463317871
+12.316384315490723
+10.129083633422852
+12.461018562316895
+13.69039535522461
+10.605690956115723
+11.078442573547363
+10.647404670715332
+13.907801628112793
+9.22032356262207
+12.12643814086914
+10.30738639831543
+12.606876373291016
+9.222529411315918
+11.954773902893066
+10.49276065826416
+14.304624557495117
+11.358744621276855
+8.687580108642578
+10.281694412231445
+10.74123764038086
+9.27637004852295
+10.500677108764648
+9.315572738647461
+9.520061492919922
+11.103501319885254
+11.161638259887695
+11.23027229309082
+7.806924343109131
+13.278614044189453
+11.83285903930664
+9.629695892333984
+10.773478507995605
+9.072622299194336
+9.812824249267578
+13.24282169342041
+10.963342666625977
+9.725305557250977
+9.029012680053711
+9.03695011138916
+10.131400108337402
+13.947558403015137
+11.419244766235352
+11.898691177368164
+11.660931587219238
+10.061429023742676
+11.497520446777344
+12.809901237487793
+10.863630294799805
+8.125093460083008
+7.469451427459717
+10.671889305114746
+11.224878311157227
+9.64244556427002
+9.643403053283691
+9.454347610473633
+8.55276870727539
+9.348222732543945
+10.299896240234375
+9.231563568115234
+9.949894905090332
+8.077455520629883
+9.404560089111328
+10.465301513671875
+9.281176567077637
+8.108887672424316
+9.470197677612305
+11.760165214538574
+6.930253505706787
+10.075078964233398
+8.409323692321777
+7.802064895629883
+8.755902290344238
+9.555486679077148
+9.077010154724121
+8.427393913269043
+8.506288528442383
+7.170266151428223
+7.758419036865234
+10.807315826416016
+8.01258373260498
+8.218811988830566
+8.3101224899292
+9.369029998779297
+9.459511756896973
+9.708526611328125
+7.758353233337402
+9.022072792053223
+7.03503942489624
+6.063441276550293
+9.579068183898926
+8.003768920898438
+9.531412124633789
+7.2605695724487305
+8.974498748779297
+9.40772533416748
+9.006237030029297
+8.69849681854248
+8.23283863067627
+10.0516939163208
+6.019401550292969
+6.461541652679443
+9.925166130065918
+9.101470947265625
+9.976348876953125
+5.607675075531006
+9.050604820251465
+8.00273323059082
+8.5353422164917
+7.544510841369629
+7.506710052490234
+6.829733848571777
+8.613126754760742
+8.592612266540527
+8.192902565002441
+6.942233085632324
+7.856372833251953
+9.070555686950684
+8.64041519165039
+7.913468837738037
+6.574246406555176
+7.75071907043457
+7.057945251464844
+7.3872971534729
+7.875763893127441
+6.213350296020508
+6.883249759674072
+7.580850601196289
+7.125817775726318
+9.91046142578125
+5.6778435707092285
+6.802744388580322
+6.988166332244873
+8.872272491455078
+7.118231296539307
+8.424520492553711
+7.636692047119141
+9.565744400024414
+8.37964153289795
+7.063146114349365
+6.927211761474609
+4.88486909866333
+5.06980037689209
+6.780410289764404
+6.086301803588867
+4.850202560424805
+7.979799270629883
+6.148624420166016
+5.901304721832275
+5.411088943481445
+6.302879333496094
+6.618958950042725
+4.880417823791504
+5.591373920440674
+6.40765380859375
+5.91107702255249
+6.5665130615234375
+5.255655288696289
+5.528822422027588
+5.648355484008789
+7.044066429138184
+7.250743865966797
+5.330826282501221
+4.594923973083496
+6.730301856994629
+4.8512959480285645
+6.047122478485107
+6.349576950073242
+5.296410083770752
+6.114524841308594
+5.366572380065918
+5.697829246520996
+6.239436149597168
+5.836843490600586
+4.88054895401001
+6.1162190437316895
+5.476934432983398
+6.4069952964782715
+5.5481858253479
+6.545391082763672
+4.72417688369751
+4.981783866882324
+4.559980392456055
+5.38161039352417
+3.975733518600464
+5.603244781494141
+5.809412479400635
+5.7475104331970215
+6.096259593963623
+5.84445858001709
+5.359170436859131
+5.442815780639648
+4.635664463043213
+4.976276874542236
+5.579714775085449
+5.920684337615967
+5.080137252807617
+4.3282694816589355
+4.686100006103516
+4.749856472015381
+4.3419880867004395
+4.526195049285889
+6.3921098709106445
+4.087148189544678
+4.322854042053223
+5.063938617706299
+4.79725456237793
+6.3536272048950195
+5.09281063079834
+4.247463226318359
+3.7620999813079834
+4.812386512756348
+3.9307312965393066
+4.209801197052002
+3.80802845954895
+4.269464492797852
+4.941763877868652
+4.4933600425720215
+4.983832359313965
+5.1211724281311035
+5.657429218292236
+4.3082356452941895
+4.365445137023926
+3.9196009635925293
+4.211538791656494
+5.5622639656066895
+4.30189847946167
+4.318421840667725
+4.036620140075684
+4.024697303771973
+3.599339246749878
+5.080698013305664
+2.981902599334717
+3.6235415935516357
+4.768585205078125
+3.9881162643432617
+3.4466307163238525
+4.302891254425049
+3.896972417831421
+4.975249767303467
+3.3723886013031006
+4.380087375640869
+3.6773946285247803
+3.507293701171875
+3.852163791656494
+4.447554588317871
+4.145574569702148
+4.51737117767334
+4.3943071365356445
+3.8847599029541016
+3.0491714477539062
+3.3182928562164307
+3.145413875579834
+3.453437089920044
+4.861083984375
+5.043808460235596
+4.37673807144165
+4.264418125152588
+3.3205738067626953
+3.5635311603546143
+4.186126232147217
+3.17484450340271
+3.2935609817504883
+4.139324188232422
+4.10752534866333
+4.583308219909668
+3.824875831604004
+4.234518051147461
+3.5373566150665283
+3.6325836181640625
+4.474077224731445
+3.5913314819335938
+3.3791487216949463
+3.818492889404297
+3.576718807220459
+3.074841022491455
+4.589286804199219
+4.9279303550720215
+3.2122926712036133
+3.53069806098938
+3.0408215522766113
+3.1210379600524902
+3.972811460494995
+2.820545196533203
+2.9753661155700684
+3.2039246559143066
+4.304561614990234
+2.795058488845825
+3.6055233478546143
+4.349609375
+4.457000732421875
+3.3578226566314697
+2.853200912475586
+4.547207832336426
+3.71525239944458
+3.8805532455444336
+3.2830116748809814
+3.1410460472106934
+4.244385719299316
+3.1633644104003906
+2.8494255542755127
+2.554918050765991
+3.5575625896453857
+3.138493299484253
+4.082805633544922
+3.247215747833252
+3.0268959999084473
+4.076394081115723
+3.4896204471588135
+3.368285894393921
+3.1239986419677734
+3.4116039276123047
+3.2818264961242676
+3.112525701522827
+3.3597795963287354
+3.598848342895508
+2.900707721710205
+3.9728283882141113
+2.898958206176758
+3.9185235500335693
+3.173433303833008
+3.447232961654663
+3.1679890155792236
+4.447990417480469
+3.107189655303955
+4.22524881362915
+3.3233840465545654
+3.550227642059326
+4.078894138336182
+2.816941261291504
+3.2710134983062744
+4.103876113891602
+3.376629114151001
+3.658601760864258
+3.0675745010375977
+3.127713441848755
+2.9720544815063477
+3.3234899044036865
+3.2029147148132324
+4.110997200012207
+3.207146167755127
+3.7683496475219727
+3.8766274452209473
+2.75616192817688
+3.389221668243408
+3.264263868331909
+3.865874767303467
+2.8424975872039795
+3.7502903938293457
+2.9777672290802
+3.3945934772491455
+3.335766553878784
+3.771994113922119
+3.5832512378692627
+2.956080675125122
+3.4376795291900635
+3.998025894165039
+2.7311813831329346
+3.2158689498901367
+3.540562629699707
+3.2342236042022705
+3.8305037021636963
+3.1390128135681152
+3.485523223876953
+3.4669792652130127
+3.767796754837036
+3.5047719478607178
+2.984759569168091
+3.2164902687072754
+3.1166152954101562
+3.415897846221924
+2.611834764480591
+3.862666130065918
+3.0787580013275146
+3.285639524459839
+4.495078086853027
+3.364108085632324
+3.3341071605682373
+3.744595766067505
+2.965789556503296
+3.279768466949463
+3.3111510276794434
+3.7595818042755127
+3.816115379333496
+4.076173782348633
+4.1771345138549805
+3.138631820678711
+3.277111530303955
+3.956434726715088
+3.6578469276428223
+4.299097061157227
+4.024972438812256
+3.4792001247406006
+4.518208980560303
+3.919412136077881
+4.384096145629883
+4.809706211090088
+4.574504375457764
+4.825948715209961
+3.8937370777130127
+3.2497544288635254
+3.348829746246338
+3.877976655960083
+4.807061195373535
+4.19301700592041
+3.7928073406219482
+3.5153565406799316
+4.369344711303711
+4.746561050415039
+5.9832940101623535
+6.059764385223389
+5.890462875366211
+3.8835947513580322
+3.609372854232788
+5.062462329864502
+4.113190650939941
+3.581843852996826
+3.409597396850586
+4.5961103439331055
+4.65641450881958
+4.902923107147217
+4.033980369567871
+4.058071136474609
+4.980954647064209
+4.085536956787109
+4.229255676269531
+3.293346643447876
+3.464874267578125
+3.9673638343811035
+3.923771381378174
+3.278610944747925
+4.934590816497803
+6.165642738342285
+4.442200660705566
+4.853152751922607
+4.61954927444458
+3.7030282020568848
+4.485597610473633
+5.032050609588623
+4.393487930297852
+4.561595439910889
+3.8683595657348633
+4.462499618530273
+4.602001667022705
+5.785060405731201
+5.904040336608887
+5.32254695892334
+4.12208366394043
+4.970413684844971
+6.646961212158203
+6.090055465698242
+4.996232032775879
+5.3743205070495605
+4.901844024658203
+3.9967503547668457
+5.7420973777771
+6.997772216796875
+6.238030910491943
+3.924320697784424
+5.6335883140563965
+5.382786273956299
+5.185755729675293
+5.015298843383789
+5.182074546813965
+6.259066581726074
+5.735254287719727
+8.402029037475586
+7.44135046005249
+8.499380111694336
+6.106293201446533
+6.0944414138793945
+5.301347255706787
+8.861555099487305
+12.311391830444336
+7.2152557373046875
+6.250033855438232
+5.284031867980957
+5.381573677062988
+4.5272369384765625
+6.995848655700684
+7.101648330688477
+7.960639953613281
+6.852879047393799
+3.8690097332000732
+4.072272300720215
+5.209026336669922
+5.6040520668029785
+5.993564605712891
+7.087926864624023
+8.062431335449219
+9.747995376586914
+6.790176868438721
+7.22239351272583
+5.771853923797607
+5.434926509857178
+7.397158145904541
+7.73043966293335
+6.790462493896484
+8.449735641479492
+6.94552755355835
+10.914224624633789
+9.567365646362305
+10.504263877868652
+6.578146457672119
+7.8354668617248535
+8.277453422546387
+8.893840789794922
+11.445467948913574
+6.639841556549072
+7.730043411254883
+8.568772315979004
+7.460530757904053
+7.207331657409668
+8.167706489562988
+7.838566303253174
+5.800595283508301
+10.115594863891602
+4.292886734008789
+8.438791275024414
+7.931124687194824
+6.343996047973633
+8.375015258789062
+6.468666076660156
+6.902678489685059
+9.411162376403809
+10.597082138061523
+10.699217796325684
+11.059724807739258
+7.664960861206055
+7.898968696594238
+6.15482759475708
+6.096246719360352
+6.936249732971191
+7.655722141265869
+9.280254364013672
+6.194483280181885
+8.092377662658691
+8.768957138061523
+7.386622905731201
+10.86899471282959
+10.410085678100586
+10.68460750579834
+8.769866943359375
+8.722225189208984
+9.647274017333984
+7.9557600021362305
+8.581648826599121
+7.340024948120117
+6.9809417724609375
+8.761804580688477
+8.999138832092285
+10.290088653564453
+6.927513599395752
+9.826526641845703
+11.084794044494629
+6.962419509887695
+11.296157836914062
+8.386797904968262
+9.349197387695312
+9.952279090881348
+10.190406799316406
+13.448662757873535
+10.416336059570312
+10.262770652770996
+11.59829330444336
+8.883024215698242
+10.651888847351074
+8.286900520324707
+10.57921314239502
+10.578049659729004
+11.571516990661621
+12.024585723876953
+8.149734497070312
+11.033391952514648
+9.977598190307617
+11.880741119384766
+8.24068832397461
+9.956643104553223
+11.348530769348145
+14.568349838256836
+16.258228302001953
+12.204757690429688
+10.767562866210938
+12.151226043701172
+14.850882530212402
+12.264532089233398
+10.204282760620117
+10.683204650878906
+12.85846996307373
+17.945899963378906
+10.569111824035645
+14.298750877380371
+10.739777565002441
+17.308917999267578
+13.745304107666016
+11.550067901611328
+12.289779663085938
+11.560111045837402
+11.181889533996582
+12.558286666870117
+11.133200645446777
+11.198123931884766
+12.016657829284668
+11.244430541992188
+10.727561950683594
+13.395211219787598
+10.224061012268066
+12.716102600097656
+14.471595764160156
+13.401673316955566
+17.21458625793457
+14.323077201843262
+19.27243423461914
+20.000822067260742
+16.914438247680664
+9.531935691833496
+12.516231536865234
+12.459766387939453
+9.207915306091309
+10.808636665344238
+10.807703971862793
+12.781746864318848
+14.399681091308594
+15.479743003845215
+12.067764282226562
+16.33179473876953
+16.757856369018555
+15.209238052368164
+18.29767608642578
+17.13522720336914
+15.591724395751953
+14.667969703674316
+15.0635347366333
+15.324156761169434
+15.345002174377441
+13.614517211914062
+11.576675415039062
+19.428817749023438
+15.338082313537598
+15.292872428894043
+13.03862190246582
+12.927718162536621
+13.992708206176758
+31.782779693603516
+14.408294677734375
+16.602188110351562
+27.092931747436523
+20.221508026123047
+19.14093780517578
+16.108354568481445
+17.73938751220703
+16.296924591064453
+20.588321685791016
+16.90170669555664
+17.348058700561523
+17.156356811523438
+26.146474838256836
+23.42630386352539
+21.714170455932617
+25.21057891845703
+28.225736618041992
+26.44867515563965
+24.209041595458984
+24.74105453491211
+31.595918655395508
+21.057050704956055
+23.551347732543945
+21.69952964782715
+20.37238883972168
+23.448055267333984
+30.25034523010254
+21.83735466003418
+23.406211853027344
+25.50998306274414
+22.3135929107666
+32.62458801269531
+38.18891143798828
+23.028343200683594
+25.610549926757812
+22.401121139526367
+24.220216751098633
+32.993831634521484
+27.283489227294922
+31.83912467956543
+32.94308090209961
+34.9365234375
+27.782106399536133
+29.326738357543945
+41.74710464477539
+23.350324630737305
+26.150951385498047
+34.16910171508789
+36.40987777709961
+37.45579528808594
+20.85873794555664
+43.587379455566406
+39.335025787353516
+27.194637298583984
+28.844467163085938
+38.47759246826172
+38.109718322753906
+32.55181121826172
+26.55961036682129
+35.65530014038086
+27.396835327148438
+34.551090240478516
+26.080490112304688
+27.279502868652344
+25.24319076538086
+25.858488082885742
+33.77938461303711
+24.02435302734375
+27.767898559570312
+24.559001922607422
+43.594642639160156
+26.68766975402832
+26.41925621032715
+37.36347198486328
+41.81816101074219
+34.90917205810547
+40.68021011352539
+32.32591247558594
+38.547874450683594
+34.61859893798828
+34.86686325073242
+36.973358154296875
+38.11799240112305
+51.238555908203125
+49.27067565917969
+46.336307525634766
+53.21565246582031
+46.25751495361328
+45.859031677246094
+36.48525619506836
+51.31349563598633
+47.10385513305664
+61.56968307495117
+34.892086029052734
+56.66950988769531
+70.61302185058594
+40.962833404541016
+58.1834831237793
+58.44976806640625
+60.04684829711914
+45.72854995727539
+43.415428161621094
+35.57026290893555
+32.213966369628906
+52.3416748046875
+43.54084396362305
+35.349754333496094
+35.295555114746094
+54.3027229309082
+55.16071319580078
+60.0406608581543
+49.719871520996094
+58.919681549072266
+90.24168395996094
+53.76655197143555
+53.47417449951172
+52.507747650146484
+65.25830078125
+68.51478576660156
+65.1689224243164
+64.79029846191406
+39.27325439453125
+59.22473907470703
+49.49073028564453
+90.13214874267578
+69.495361328125
+57.639835357666016
+69.23587799072266
+94.24659729003906
+83.33028411865234
+64.9979248046875</code></pre>
+</div>
+</div>
+<div id="798cd4dd" class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>block_size <span class="op">=</span> <span class="dv">3</span> <span class="co">#characters to take as context before predicting the next</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>X,Y<span class="op">=</span>[],[]</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> words:</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(w)</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    context <span class="op">=</span> [<span class="dv">0</span>]<span class="op">*</span>block_size</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ch <span class="kw">in</span> w <span class="op">+</span> <span class="st">'.'</span>:</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>        ix<span class="op">=</span>stoi[ch]</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>        X.append(context)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        Y.append(ix)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         print(''.join(itos[i] for i in context))</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        context <span class="op">=</span> context[<span class="dv">1</span>:] <span class="op">+</span> [ix]</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> torch.tensor(X)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> torch.tensor(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="eae0671f" class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">2147483647</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> torch.randn((<span class="dv">27</span>,<span class="dv">2</span>), generator<span class="op">=</span>g)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>W1 <span class="op">=</span> torch.randn((<span class="dv">6</span>,<span class="dv">100</span>), generator<span class="op">=</span>g) <span class="co"># 100 neurons each taking 6 inputs</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> torch.randn((<span class="dv">100</span>), generator<span class="op">=</span>g) <span class="co"># the bias for each of the 100 neurons</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> torch.randn((<span class="dv">100</span>,<span class="dv">27</span>), generator<span class="op">=</span>g) <span class="co"># 27 neurons each taking 100 inputs</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>b2 <span class="op">=</span> torch.randn(<span class="dv">27</span>, generator<span class="op">=</span>g)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>parameters <span class="op">=</span> [C, W1, b1, W2, b2]</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    p.requires_grad <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4c28a49b" class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20000</span>):</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,X.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[X[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Y[ix])</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(loss.item())</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">1</span> <span class="co">#lrs[i]</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     lrei.append(lre[i])</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     lossi.append(loss.item())</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.3090484142303467</code></pre>
+</div>
+</div>
+<p>Decay the learning rate</p>
+<div id="6df7019e" class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10000</span>):</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,X.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[X[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Y[ix])</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(loss.item())</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">3</span> <span class="co">#lrs[i]</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     lrei.append(lre[i])</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     lossi.append(loss.item())</span></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.323967933654785</code></pre>
+</div>
+</div>
+<div id="c8202e33" class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#build dataset</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_dataset(words):</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    block_size <span class="op">=</span> <span class="dv">3</span> <span class="co">#characters to take as context before predicting the next</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    X,Y<span class="op">=</span>[],[]</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> w <span class="kw">in</span> words:</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     print(w)</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>        context <span class="op">=</span> [<span class="dv">0</span>]<span class="op">*</span>block_size</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ch <span class="kw">in</span> w <span class="op">+</span> <span class="st">'.'</span>:</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>            ix<span class="op">=</span>stoi[ch]</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>            X.append(context)</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>            Y.append(ix)</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#         print(''.join(itos[i] for i in context))</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>            context <span class="op">=</span> context[<span class="dv">1</span>:] <span class="op">+</span> [ix]</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> torch.tensor(X)</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> torch.tensor(Y)</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(X.shape, Y.shape)</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X, Y</span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>random.seed(<span class="dv">42</span>)</span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>random.shuffle(words)</span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>n1 <span class="op">=</span> <span class="bu">int</span>(<span class="fl">0.8</span><span class="op">*</span><span class="bu">len</span>(words))</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>n2 <span class="op">=</span> <span class="bu">int</span>(<span class="fl">0.9</span><span class="op">*</span><span class="bu">len</span>(words))</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>Xtr,Ytr<span class="op">=</span>build_dataset(words[:n1])</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>Xdev,Ydev<span class="op">=</span>build_dataset(words[n1:n2])</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>Xte,Yte<span class="op">=</span>build_dataset(words[n2:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([182625, 3]) torch.Size([182625])
+torch.Size([22655, 3]) torch.Size([22655])
+torch.Size([22866, 3]) torch.Size([22866])</code></pre>
+</div>
+</div>
+<div id="2d821974" class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">2147483647</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> torch.randn((<span class="dv">27</span>,<span class="dv">2</span>), generator<span class="op">=</span>g)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>W1 <span class="op">=</span> torch.randn((<span class="dv">6</span>,<span class="dv">100</span>), generator<span class="op">=</span>g) <span class="co"># 100 neurons each taking 6 inputs</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> torch.randn((<span class="dv">100</span>), generator<span class="op">=</span>g) <span class="co"># the bias for each of the 100 neurons</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> torch.randn((<span class="dv">100</span>,<span class="dv">27</span>), generator<span class="op">=</span>g) <span class="co"># 27 neurons each taking 100 inputs</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>b2 <span class="op">=</span> torch.randn(<span class="dv">27</span>, generator<span class="op">=</span>g)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>parameters <span class="op">=</span> [C, W1, b1, W2, b2]</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    p.requires_grad <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now train on Xtr,Ytr</p>
+<div id="04f01a2c" class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">30000</span>):</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,Xtr.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[Xtr[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Ytr[ix])</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(loss.item())</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">1</span> <span class="co">#lrs[i]</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     lrei.append(lre[i])</span></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     lossi.append(loss.item())</span></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.3105552196502686</code></pre>
+</div>
+</div>
+<p>Decay the learning rate</p>
+<div id="a812cf48" class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20000</span>):</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,Xtr.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[Xtr[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Ytr[ix])</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(loss.item())</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">2</span> <span class="co">#lrs[i]</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     lrei.append(lre[i])</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     lossi.append(loss.item())</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.535987615585327</code></pre>
+</div>
+</div>
+<p>Evaluate on the Dev set</p>
+<div id="e0fb9209" class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>emb <span class="op">=</span> C[Xdev]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> F.cross_entropy(logits, Ydev)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.32991361618042</code></pre>
+</div>
+</div>
+</section>
+<section id="scale-up-the-neural-net" class="level2">
+<h2 class="anchored" data-anchor-id="scale-up-the-neural-net">Scale up the neural net</h2>
+<div id="9cd37983" class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">2147483647</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> torch.randn((<span class="dv">27</span>,<span class="dv">2</span>), generator<span class="op">=</span>g)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>W1 <span class="op">=</span> torch.randn((<span class="dv">6</span>,<span class="dv">300</span>), generator<span class="op">=</span>g) <span class="co"># 300 neurons each taking 6 inputs</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> torch.randn((<span class="dv">300</span>), generator<span class="op">=</span>g) <span class="co"># the bias for each of the 300 neurons</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> torch.randn((<span class="dv">300</span>,<span class="dv">27</span>), generator<span class="op">=</span>g) <span class="co"># 27 neurons each taking 300 inputs</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>b2 <span class="op">=</span> torch.randn(<span class="dv">27</span>, generator<span class="op">=</span>g)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>parameters <span class="op">=</span> [C, W1, b1, W2, b2]</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sum</span>([p.nelement() <span class="cf">for</span> p <span class="kw">in</span> parameters]))</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    p.requires_grad <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10281</code></pre>
+</div>
+</div>
+<div id="8dea2630" class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>stepi <span class="op">=</span> []</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">30000</span>):</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,Xtr.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[Xtr[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Ytr[ix])</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(loss.item())</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">2</span> <span class="co">#lrs[i]</span></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     lrei.append(lre[i])</span></span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>    lossi.append(loss.item())</span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>    stepi.append(i)</span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.2436883449554443</code></pre>
+</div>
+</div>
+<div id="c3dc14d6" class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>plt.plot(stepi, lossi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_build_makemore_mlp_yay_files/figure-html/cell-35-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="ef56fce3" class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>emb <span class="op">=</span> C[Xdev]</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">6</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> F.cross_entropy(logits, Ydev)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.228832483291626</code></pre>
+</div>
+</div>
+</section>
+<section id="visualize-embedding" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-embedding">Visualize embedding</h2>
+<p>Observe how most of the vowels are clustered to the bottom left. q seems to be far and on it’s own</p>
+<div id="9ca71f00" class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(C[:,<span class="dv">0</span>].data,C[:,<span class="dv">1</span>].data,s<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(C.shape[<span class="dv">0</span>]):</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>    plt.text(C[i,<span class="dv">0</span>].item(),C[i,<span class="dv">1</span>].item(),itos[i],ha<span class="op">=</span><span class="st">"center"</span>,va<span class="op">=</span><span class="st">"center"</span>,color<span class="op">=</span><span class="st">"white"</span>)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="st">"minor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_build_makemore_mlp_yay_files/figure-html/cell-37-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="lets-make-the-embedding-vector-bigger" class="level2">
+<h2 class="anchored" data-anchor-id="lets-make-the-embedding-vector-bigger">Let’s make the embedding vector bigger</h2>
+<p>This may be the bottleneck to getting a better loss.</p>
+<div id="a681039f" class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">2147483647</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> torch.randn((<span class="dv">27</span>,<span class="dv">10</span>), generator<span class="op">=</span>g)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>W1 <span class="op">=</span> torch.randn((<span class="dv">30</span>,<span class="dv">200</span>), generator<span class="op">=</span>g) <span class="co"># 200 neurons each taking 30 inputs (10 per character in the context)</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> torch.randn((<span class="dv">200</span>), generator<span class="op">=</span>g) <span class="co"># the bias for each of the 200 neurons</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> torch.randn((<span class="dv">200</span>,<span class="dv">27</span>), generator<span class="op">=</span>g) <span class="co"># 27 neurons each taking 200 inputs</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>b2 <span class="op">=</span> torch.randn(<span class="dv">27</span>, generator<span class="op">=</span>g)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>parameters <span class="op">=</span> [C, W1, b1, W2, b2]</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sum</span>([p.nelement() <span class="cf">for</span> p <span class="kw">in</span> parameters]))</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    p.requires_grad <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11897</code></pre>
+</div>
+</div>
+<div id="58c53332" class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>lrei <span class="op">=</span> []</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>lossi <span class="op">=</span> []</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>stepi <span class="op">=</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="13badc1f" class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200000</span>):</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  minibatch construct</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(<span class="dv">0</span>,Xtr.shape[<span class="dv">0</span>],(<span class="dv">32</span>,))</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># forward pass</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>    emb <span class="op">=</span> C[Xtr[ix]] <span class="co">#(32,3,2)</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">30</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2 <span class="co">#(32,27)</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> F.cross_entropy(logits, Ytr[ix])</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(loss.item())</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#backward pass</span></span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>        p.grad <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>    loss.backward()  </span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">1</span> <span class="cf">if</span> i <span class="op">&lt;</span> <span class="dv">100000</span> <span class="cf">else</span> <span class="dv">10</span><span class="op">**-</span><span class="dv">2</span> <span class="co">#lrs[i]</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> parameters:</span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>        p.data <span class="op">+=</span> <span class="op">-</span>lr <span class="op">*</span> p.grad</span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#track stats</span></span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a><span class="co">#     lrei.append(lre[i])</span></span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>    lossi.append(loss.log10().item()) <span class="co">#track log loss for o/w plot has a hockey stick shape</span></span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>    stepi.append(i)</span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.8843928575515747</code></pre>
+</div>
+</div>
+<div id="04152dd2" class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>plt.plot(stepi, lossi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_build_makemore_mlp_yay_files/figure-html/cell-41-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="493dbff8" class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>emb <span class="op">=</span> C[Xdev]</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> torch.tanh(emb.view((<span class="op">-</span><span class="dv">1</span>,<span class="dv">30</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="co">#(32,100)</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> F.cross_entropy(logits, Ydev)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss.item())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.1519885063171387</code></pre>
+</div>
+</div>
+</section>
+<section id="sample-from-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="sample-from-the-model">Sample from the model</h2>
+<div id="a8952c1d" class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator().manual_seed(<span class="dv">2147483647</span> <span class="op">+</span> <span class="dv">10</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    out<span class="op">=</span>[]</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    context <span class="op">=</span> [<span class="dv">0</span>]<span class="op">*</span>block_size</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>        emb <span class="op">=</span> C[torch.tensor([context])]</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>        h <span class="op">=</span> torch.tanh(emb.view((<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)) <span class="op">@</span> W1 <span class="op">+</span> b1)</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> h <span class="op">@</span> W2 <span class="op">+</span> b2</span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>        probs <span class="op">=</span> F.softmax(logits, dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>        ix <span class="op">=</span> torch.multinomial(probs, num_samples<span class="op">=</span><span class="dv">1</span>, generator<span class="op">=</span>g).item()</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>        context <span class="op">=</span> context[<span class="dv">1</span>:]<span class="op">+</span>[ix]</span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>        out.append(ix)</span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> ix <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">''</span>.join([itos[i] <span class="cf">for</span> i <span class="kw">in</span> out]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>carmahzari.
+harli.
+jorri.
+taty.
+ska.
+sane.
+mahnen.
+delyah.
+jareei.
+ner.
+kiah.
+maiir.
+kaleigh.
+ham.
+jorn.
+quintis.
+lilea.
+jadzi.
+wajerma.
+jarysi.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="next-steps" class="level1">
+<h1>Next steps</h1>
+<ul>
+<li>Beat 2.17 validation loss. Some ideas:
+<ul>
+<li>change context size</li>
+<li>number of neurons in hidden layer</li>
+<li>embedding size</li>
+<li>batch size</li>
+<li>learning rate and decay</li>
+</ul></li>
+<li>Read the paper</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nasheqlbrm/makemore/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
